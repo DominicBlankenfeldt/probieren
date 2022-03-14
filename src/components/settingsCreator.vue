@@ -3,6 +3,14 @@
     <div class="mainSettings">
       <div class="row g-3 align-items-center">
         <div class="col-auto">
+          <label for="optionName" class="col-form-label">Name der Option</label>
+        </div>
+        <div class="col-auto">
+          <input type="text" id="optionName" class="form-control" />
+        </div>
+      </div>
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
           <label for="azubiName" class="col-form-label"
             >Name des/der Auszubildenden</label
           >
@@ -48,7 +56,7 @@
     </div>
     <div class="daySettings">
       <div class="row" v-for="day in days" :key="day">
-        <span style="border: solid 1px black">{{ day }}</span>
+        <span style="border: solid 1px black">{{ day.dayName }}</span>
         <div class="row" style="border: 1px solid black">
           <div class="col-3">
             <label for="school">Schule</label>
@@ -80,13 +88,13 @@ export default defineComponent({
   data() {
     return {
       days: [
-        "Montag",
-        "Dienstag",
-        "Mittwoch",
-        "Donnerstag",
-        "Freitag",
-        "Samstag",
-        "Sonntag",
+        { dayName: "Montag", value: {} },
+        { dayName: "Dienstag", value: {} },
+        { dayName: "Mittwoch", value: {} },
+        { dayName: "Donnerstag", value: {} },
+        { dayName: "Freitag", value: {} },
+        { dayName: "Samstag", value: {} },
+        { dayName: "Sonntag", value: {} },
       ],
     };
   },

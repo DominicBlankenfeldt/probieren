@@ -1,20 +1,22 @@
 <template>
-  <div>DailyReport</div>
-  <div class="selection d-flex justify-content-center">
-    <select
-      class="form-select"
-      aria-label="Default select example"
-      style="width: 25%"
-    >
-      <option selected disabled>Einstellung auswählen:</option>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
-    </select>
-  </div>
-  <div class="buttonGroup">
-    <button class="btn btn-success" style="margin: 1rem">generieren</button>
-    <button class="btn btn-success" style="margin: 1rem">zurücksetzen</button>
+  <div class="no-print">
+    <div>DailyReport</div>
+    <div class="selection d-flex justify-content-center">
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        style="width: 25%"
+      >
+        <option selected disabled>Einstellung auswählen:</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </div>
+    <div class="buttonGroup">
+      <button class="btn btn-success" style="margin: 1rem">generieren</button>
+      <button class="btn btn-success" style="margin: 1rem">zurücksetzen</button>
+    </div>
   </div>
   <div class="report">
     <div class="reportHeader" style="margin: 2rem; width: 100%">
@@ -136,5 +138,23 @@ tr {
 }
 td {
   border: 1px solid black;
+}
+@media print {
+  .report {
+    page-break-after: always;
+  }
+}
+.print-only {
+  display: none;
+}
+
+@media print {
+  .no-print {
+    display: none;
+  }
+
+  .print-only {
+    display: block;
+  }
 }
 </style>

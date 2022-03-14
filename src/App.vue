@@ -1,5 +1,5 @@
 <template>
-  <div id="nav">
+  <div id="nav" class="no-print">
     <router-link to="/">Home</router-link> |
     <router-link to="/about">Settings</router-link> |
     <router-link to="/report">Report</router-link>
@@ -26,6 +26,19 @@
     &.router-link-exact-active {
       color: #42b983;
     }
+  }
+}
+.print-only {
+  display: none;
+}
+
+@media print {
+  .no-print {
+    display: none;
+  }
+
+  .print-only {
+    display: block;
   }
 }
 </style>
