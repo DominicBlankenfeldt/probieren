@@ -150,16 +150,19 @@
         <label for="reportText">Schreibe deinen Bericht</label>
         <textarea class="form-control" id="reportText" rows="3"></textarea>
       </div>
-      <button class="btn btn-success" type="submit">Speichern</button>
+      <button class="btn btn-success" type="submit" @click="saveReport()">
+        Speichern
+      </button>
     </form>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  methods: {},
   data() {
     return {
+      schoolReports: [],
+      workReports: [],
       days: [
         { dayName: "Montag", value: {} },
         { dayName: "Dienstag", value: {} },
@@ -171,6 +174,12 @@ export default defineComponent({
       ],
     };
   },
+  methods: {
+    saveReport() {
+      console.log("test");
+    },
+  },
+
   setup() {
     return {};
   },
