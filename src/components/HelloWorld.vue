@@ -1,16 +1,6 @@
 <template>
   <div class="generator">
-    <div class="settings">
-      <div>
-        <label for="from">von: </label>
-        <input style="width: 10%" name="from" type="date" />
-      </div>
-      <div>
-        <label for="to">bis: </label>
-        <input style="width: 10%" name="to" type="date" />
-      </div>
-      <button class="btn btn-primary">erstellen</button>
-    </div>
+    <div class="settings"></div>
   </div>
 </template>
 

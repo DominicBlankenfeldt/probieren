@@ -8,9 +8,9 @@
         style="width: 25%"
       >
         <option selected disabled>Einstellung auswählen:</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+        <option v-for="option in options" :key="option.optionName">
+          {{ option.optionName }}
+        </option>
       </select>
     </div>
     <div class="buttonGroup">
@@ -27,7 +27,7 @@
           <tbody>
             <tr>
               <th scope="row">Name des/der Auszubildenden:</th>
-              <td colspan="3">fill name</td>
+              <td colspan="3"></td>
             </tr>
             <tr>
               <th scope="row">Ausbildungjahr:</th>
@@ -119,10 +119,19 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+import { Option } from "@/types";
+import * as API from "@/API";
 export default defineComponent({
-  methods: {},
+  methods: {
+    async getOptions() {
+      this.options = await API.getOption();
+    },
+  },
+  mounted() {
+    this.getOptions();
+  },
   data() {
-    return {};
+    return { options: [] as Option[] };
   },
   setup() {
     return {};

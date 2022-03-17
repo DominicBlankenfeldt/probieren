@@ -15,6 +15,7 @@
               class="form-control"
               style="width: 50%"
               placeholder="z.B. erstes Halbjahr"
+              v-model="Option.optionName"
             />
           </div>
         </div>
@@ -31,6 +32,7 @@
               class="form-control"
               style="width: 50%"
               placeholder="z.B. Otto Ottomann"
+              v-model="Option.azubiName"
             />
           </div>
         </div>
@@ -47,6 +49,7 @@
               class="form-control"
               style="width: 50%"
               placeholder="z.B. 1. Ausbildungsjahr"
+              v-model="Option.azubiYear"
             />
           </div>
         </div>
@@ -63,6 +66,7 @@
               class="form-control"
               style="width: 50%"
               placeholder="z.B. Personalabteilung"
+              v-model="Option.department"
             />
           </div>
         </div>
@@ -79,6 +83,7 @@
               class="form-control"
               style="width: 50%"
               placeholder="z.B. 1.Mai.2020"
+              v-model="Option.weekFrom"
             />
           </div>
           <div class="col-auto">
@@ -91,31 +96,56 @@
               class="form-control"
               style="width: 50%"
               placeholder="z.B. 1.Mai.2020"
+              v-model="Option.weekTo"
             />
           </div>
         </div>
       </div>
       <div class="daySettings m-5">
-        <div class="" v-for="day in days" :key="day">
+        <div class="" v-for="day in Option.week" :key="day.dayName">
           <div style="border: solid 1px black; background-color: #42b983">
             {{ day.dayName }}
           </div>
           <div class="row g-0" style="border: 1px solid black">
             <div class="col-3">
               <label for="school">Schule</label>
-              <input type="radio" id="school" name="dailySelection" />
+              <input
+                type="radio"
+                id="school"
+                :name="day.dayName"
+                @change="day.value = 'school'"
+                :checked="day.value == 'school'"
+              />
             </div>
             <div class="col-3">
               <label for="work">Betrieb</label>
-              <input type="radio" id="work" name="dailySelection" />
+              <input
+                type="radio"
+                id="work"
+                :name="day.dayName"
+                @change="day.value = 'work'"
+                :checked="day.value == 'work'"
+              />
             </div>
             <div class="col-3">
               <label for="free">Frei/Urlaub</label>
-              <input type="radio" id="free" name="dailySelection" />
+              <input
+                type="radio"
+                id="free"
+                :name="day.dayName"
+                @change="day.value = 'free'"
+                :checked="day.value == 'free'"
+              />
             </div>
             <div class="col-3">
               <label for="none">keine Angaben</label>
-              <input checked type="radio" id="none" name="dailySelection" />
+              <input
+                type="radio"
+                id="none"
+                :name="day.dayName"
+                @change="day.value = 'none'"
+                :checked="day.value == 'none'"
+              />
             </div>
           </div>
           <div class="row g-0 align-items-center">
@@ -125,11 +155,18 @@
               >
             </div>
             <div class="col-auto">
-              <input type="text" id="workHours" class="form-control" />
+              <input
+                type="text"
+                id="workHours"
+                class="form-control"
+                v-model="day.hours"
+              />
             </div>
           </div>
         </div>
-        <button type="submit" class="btn btn-success">speichern</button>
+        <button type="submit" class="btn btn-success" @click="saveOption()">
+          speichern
+        </button>
       </div>
     </div>
   </div>
@@ -137,18 +174,39 @@
     class="schoolWorkReports m-5"
     style="border: 3px black solid; border-radius: 5px"
   >
-    <form>
+    <form class="m-5">
       <div>Texte für den Bericht hinzufügen</div>
       <div>Bericht für die Schule/den Betrieb:</div>
-      <div class="col-6">
+      <div class="m-1">
         <label for="workReport">Betrieb</label>
-        <input type="radio" id="workReport" name="reports" value="work" />
+        <input
+          type="radio"
+          id="workReport"
+          name="reports"
+          value="work"
+          v-model="report.type"
+          @change="report.type = 'work'"
+          :checked="report.type == 'work'"
+        />
         <label for="schoolReport">Schule</label>
-        <input type="radio" id="schoolReport" name="reports" value="school" />
+        <input
+          type="radio"
+          id="schoolReport"
+          name="reports"
+          value="school"
+          v-model="report.type"
+          @change="report.type = 'school'"
+          :checked="report.type == 'school'"
+        />
       </div>
-      <div class="form-group">
+      <div class="form-group m-1">
         <label for="reportText">Schreibe deinen Bericht</label>
-        <textarea class="form-control" id="reportText" rows="3"></textarea>
+        <textarea
+          class="form-control"
+          id="reportText"
+          rows="3"
+          v-model="report.value"
+        ></textarea>
       </div>
       <button class="btn btn-success" type="submit" @click="saveReport()">
         Speichern
@@ -158,25 +216,48 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+import { Day } from "@/types";
+import * as API from "@/API";
+const initialOption = {
+  optionName: "",
+  azubiName: "",
+  azubiYear: "",
+  department: "",
+  weekFrom: "",
+  weekTo: "",
+  week: [
+    { dayName: "Montag", value: "", hours: "" },
+    { dayName: "Dienstag", value: "", hours: "" },
+    { dayName: "Mittwoch", value: "", hours: "" },
+    { dayName: "Donnerstag", value: "", hours: "" },
+    { dayName: "Freitag", value: "", hours: "" },
+    { dayName: "Samstag", value: "", hours: "" },
+    { dayName: "Sonntag", value: "", hours: "" },
+  ] as Day[],
+};
 export default defineComponent({
   data() {
     return {
-      schoolReports: [],
-      workReports: [],
-      days: [
-        { dayName: "Montag", value: {} },
-        { dayName: "Dienstag", value: {} },
-        { dayName: "Mittwoch", value: {} },
-        { dayName: "Donnerstag", value: {} },
-        { dayName: "Freitag", value: {} },
-        { dayName: "Samstag", value: {} },
-        { dayName: "Sonntag", value: {} },
-      ],
+      report: {
+        type: "",
+        value: "",
+      },
+      Option: { ...initialOption },
     };
   },
   methods: {
     saveReport() {
-      console.log("test");
+      if (this.report.type == "school") {
+        API.addSchoolReport(this.report);
+      } else {
+        API.addWorkReport(this.report);
+      }
+      this.report.type = "";
+      this.report.value = "";
+    },
+    saveOption() {
+      API.addOption(this.Option);
+      this.Option = { ...initialOption };
     },
   },
 
