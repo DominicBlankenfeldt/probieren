@@ -164,6 +164,13 @@
             </div>
           </div>
         </div>
+        <div
+          v-if="alertOption == true"
+          class="alert alert-success"
+          role="alert"
+        >
+          Deine Option wurde gespeichert!
+        </div>
         <button type="submit" class="btn btn-success" @click="saveOption()">
           speichern
         </button>
@@ -201,6 +208,17 @@
       </div>
       <div class="form-group m-1">
         <label for="reportText">Schreibe deinen Bericht</label>
+        <div v-if="alert == true" class="alert alert-danger" role="alert">
+          Du hast keinen Typen ausgewählt. Wähle einen Typen Betrieb oder Schule
+          aus!
+        </div>
+        <div
+          v-if="alertSuccess == true"
+          class="alert alert-success"
+          role="alert"
+        >
+          Dein Bericht wurde gespeichert!
+        </div>
         <textarea
           class="form-control"
           id="reportText"
@@ -243,21 +261,41 @@ export default defineComponent({
         value: "",
       },
       Option: { ...initialOption },
+      alert: false,
+      alertOption: false,
+      alertSuccess: false,
     };
   },
   methods: {
     saveReport() {
       if (this.report.type == "school") {
-        API.addSchoolReport(this.report);
+        try {
+          API.addSchoolReport(this.report);
+        } catch (e) {
+          console.error(e, "API.addSchoolReport()");
+        }
+        this.alertSuccess = true;
+      } else if (this.report.type == "work") {
+        try {
+          API.addWorkReport(this.report);
+        } catch (e) {
+          console.error(e, "API.addWorkReport()");
+        }
+        this.alertSuccess = true;
       } else {
-        API.addWorkReport(this.report);
+        this.alert = true;
+        return;
       }
-      this.report.type = "";
       this.report.value = "";
     },
     saveOption() {
-      API.addOption(this.Option);
+      try {
+        API.addOption(this.Option);
+      } catch (e) {
+        console.error(e, "API.addOption()");
+      }
       this.Option = { ...initialOption };
+      this.alertOption = true;
     },
   },
 

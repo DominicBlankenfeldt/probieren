@@ -3,7 +3,7 @@ export interface CreatedReport extends Report {
 }
 
 export interface Report {
-  type: string;
+  type: "work" | "school";
   value: string;
 }
 export interface CreatedOption extends Option {
@@ -20,6 +20,6 @@ export interface Option {
 }
 export interface Day {
   dayName: string;
-  value: string;
+  value: "work" | "school" | "free" | "";
   hours: string;
 }

@@ -6,16 +6,29 @@
         class="form-select"
         aria-label="Default select example"
         style="width: 25%"
+        v-model="selected"
       >
         <option selected disabled>Einstellung auswählen:</option>
-        <option v-for="option in options" :key="option.optionName">
+        <option
+          v-for="option in options"
+          :key="option.optionName"
+          :value="option"
+        >
           {{ option.optionName }}
         </option>
       </select>
     </div>
     <div class="buttonGroup">
-      <button class="btn btn-success" style="margin: 1rem">generieren</button>
-      <button class="btn btn-success" style="margin: 1rem">zurücksetzen</button>
+      <button class="btn btn-success" style="margin: 1rem" @click="getOption()">
+        generieren
+      </button>
+      <button
+        class="btn btn-success"
+        style="margin: 1rem"
+        @click="resetOption()"
+      >
+        zurücksetzen
+      </button>
     </div>
   </div>
   <div class="report">
@@ -27,21 +40,21 @@
           <tbody>
             <tr>
               <th scope="row">Name des/der Auszubildenden:</th>
-              <td colspan="3"></td>
+              <td colspan="3">{{ values.azubiName }}</td>
             </tr>
             <tr>
               <th scope="row">Ausbildungjahr:</th>
-              <td colspan="3">fill year</td>
+              <td colspan="3">{{ values.azubiYear }}</td>
             </tr>
             <tr>
               <th scope="row">Ggf. ausbildende Abteilung</th>
-              <td colspan="3">fill</td>
+              <td colspan="3">{{ values.department }}</td>
             </tr>
             <tr>
               <th scope="row">Ausbildungswoche von:</th>
-              <td>fill date</td>
+              <td>{{ values.weekFrom }}</td>
               <td><b>bis:</b></td>
-              <td>fill date</td>
+              <td>{{ values.weekTo }}</td>
             </tr>
           </tbody>
         </table>
@@ -61,40 +74,21 @@
             </td>
             <td scope="col"><b>Stunden</b></td>
           </tr>
-          <tr>
-            <td scope="col">Montag</td>
-            <td scope="col"></td>
-            <td scope="col"></td>
-          </tr>
-          <tr>
-            <td scope="col">Dienstag</td>
-            <td scope="col"></td>
-            <td scope="col"></td>
-          </tr>
-          <tr>
-            <td scope="col">Mittwoch</td>
-            <td scope="col"></td>
-            <td scope="col"></td>
-          </tr>
-          <tr>
-            <td scope="col">Donnerstag</td>
-            <td scope="col"></td>
-            <td scope="col"></td>
-          </tr>
-          <tr>
-            <td scope="col">Freitag</td>
-            <td scope="col"></td>
-            <td scope="col"></td>
-          </tr>
-          <tr>
-            <td scope="col">Samstag</td>
-            <td scope="col"></td>
-            <td scope="col"></td>
-          </tr>
-          <tr>
-            <td scope="col">Sonntag</td>
-            <td scope="col"></td>
-            <td scope="col"></td>
+          <tr v-for="day in values.week" :key="day.dayName">
+            <td scoped="col">{{ day.dayName }}</td>
+            <td scoped="col">
+              <span v-if="day.value === 'work'">{{
+                workReports[Math.floor(Math.random() * workReports.length)]
+                  .value
+              }}</span>
+              <span v-else-if="day.value === 'school'">{{
+                schoolReports[Math.floor(Math.random() * schoolReports.length)]
+                  .value
+              }}</span>
+              <span v-else-if="day.value === 'free'"> Frei </span>
+            </td>
+
+            <td scoped="col">{{ day.hours }}</td>
           </tr>
         </thead>
       </table>
@@ -115,26 +109,77 @@
         </span>
       </div>
     </div>
+    <b style="color: red">{{ schoolReports }}</b>
+    {{ workReports }}
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Option } from "@/types";
+import { Option, Day, Report } from "@/types";
 import * as API from "@/API";
+const initialOption = {
+  optionName: "",
+  azubiName: "",
+  azubiYear: "",
+  department: "",
+  weekFrom: "",
+  weekTo: "",
+  week: [
+    { dayName: "Montag", value: "", hours: "" },
+    { dayName: "Dienstag", value: "", hours: "" },
+    { dayName: "Mittwoch", value: "", hours: "" },
+    { dayName: "Donnerstag", value: "", hours: "" },
+    { dayName: "Freitag", value: "", hours: "" },
+    { dayName: "Samstag", value: "", hours: "" },
+    { dayName: "Sonntag", value: "", hours: "" },
+  ] as Day[],
+};
 export default defineComponent({
   methods: {
     async getOptions() {
-      this.options = await API.getOption();
+      try {
+        this.options = await API.getOption();
+      } catch (e) {
+        console.error(e, "API.getOption()");
+      }
+    },
+    async getSchoolReports() {
+      try {
+        this.schoolReports = await API.getSchoolReport();
+      } catch (e) {
+        console.error(e, "API.getSchoolReport()");
+      }
+    },
+    async getWorkReports() {
+      try {
+        this.workReports = await API.getWorkReport();
+      } catch (e) {
+        console.error(e, "API.getWorkReport()");
+      }
+    },
+    getOption() {
+      this.values = this.selected;
+    },
+    resetOption() {
+      this.values = { ...initialOption };
     },
   },
   mounted() {
     this.getOptions();
+    this.getSchoolReports();
+    this.getWorkReports();
   },
   data() {
-    return { options: [] as Option[] };
+    return {
+      options: [] as Option[],
+      selected: {} as Option,
+      values: { ...initialOption } as Option,
+      schoolReports: [] as Report[],
+      workReports: [] as Report[],
+    };
   },
   setup() {
-    return {};
+    return;
   },
 });
 </script>
