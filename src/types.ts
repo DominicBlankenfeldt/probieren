@@ -3,7 +3,7 @@ export interface CreatedReport extends Report {
 }
 
 export interface Report {
-  type: "work" | "school";
+  type: string;
   value: string;
 }
 export interface CreatedOption extends Option {

@@ -18,12 +18,21 @@
         </option>
       </select>
     </div>
+    <div class="m-2">
+      <label for="counter" class="m-3">Wie viele Berichte</label>
+      <input
+        id="counter"
+        type="number"
+        style="width: 80px"
+        placeholder="z.B. 10"
+      />
+    </div>
     <div class="buttonGroup">
       <button class="btn btn-success" style="margin: 1rem" @click="getOption()">
         generieren
       </button>
       <button
-        class="btn btn-success"
+        class="btn btn-danger"
         style="margin: 1rem"
         @click="resetOption()"
       >
@@ -100,7 +109,7 @@
           Vollständigkeit der obigen Angaben bestätigt.
         </span>
       </div>
-      <div class="row d-flex justify-content-around" style="margin-top: 2rem">
+      <div class="row d-flex justify-content-around" style="margin-top: 5rem">
         <span class="col-4" style="border-top: 1px solid black">
           Datum, Unterschrift Auszubildende/r
         </span>
@@ -109,8 +118,6 @@
         </span>
       </div>
     </div>
-    <b style="color: red">{{ schoolReports }}</b>
-    {{ workReports }}
   </div>
 </template>
 <script lang="ts">

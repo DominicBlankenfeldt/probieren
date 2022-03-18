@@ -143,8 +143,8 @@
                 type="radio"
                 id="none"
                 :name="day.dayName"
-                @change="day.value = 'none'"
-                :checked="day.value == 'none'"
+                @change="day.value = ''"
+                :checked="day.value == ''"
               />
             </div>
           </div>
