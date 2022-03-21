@@ -25,6 +25,7 @@
         type="number"
         style="width: 80px"
         placeholder="z.B. 10"
+        v-model="counter2"
       />
     </div>
     <div class="buttonGroup">
@@ -40,7 +41,7 @@
       </button>
     </div>
   </div>
-  <div class="report">
+  <div class="report" v-for="n in parseInt(counter)" :key="n">
     <div class="reportHeader" style="margin: 2rem; width: 100%">
       <span><b>Ausbildungsnachweis (täglich)</b></span>
 
@@ -166,6 +167,7 @@ export default defineComponent({
     },
     getOption() {
       this.values = this.selected;
+      this.counter = this.counter2;
     },
     resetOption() {
       this.values = { ...initialOption };
@@ -178,6 +180,8 @@ export default defineComponent({
   },
   data() {
     return {
+      counter: "",
+      counter2: "",
       options: [] as Option[],
       selected: {} as Option,
       values: { ...initialOption } as Option,
