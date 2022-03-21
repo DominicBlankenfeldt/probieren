@@ -41,7 +41,7 @@
       </button>
     </div>
   </div>
-  <div class="report" v-for="n in parseInt(counter)" :key="n">
+  <div class="report" v-for="n in counter" :key="n">
     <div class="reportHeader" style="margin: 2rem; width: 100%">
       <span><b>Ausbildungsnachweis (täglich)</b></span>
 
@@ -180,8 +180,8 @@ export default defineComponent({
   },
   data() {
     return {
-      counter: "",
-      counter2: "",
+      counter: 0,
+      counter2: 0,
       options: [] as Option[],
       selected: {} as Option,
       values: { ...initialOption } as Option,
