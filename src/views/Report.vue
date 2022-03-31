@@ -87,14 +87,59 @@
           <tr v-for="day in values.week" :key="day.dayName">
             <td scoped="col">{{ day.dayName }}</td>
             <td scoped="col">
-              <span v-if="day.value === 'work'">{{
-                workReports[Math.floor(Math.random() * workReports.length)]
-                  .value
-              }}</span>
-              <span v-else-if="day.value === 'school'">{{
-                schoolReports[Math.floor(Math.random() * schoolReports.length)]
-                  .value
-              }}</span>
+              <span v-if="day.value === 'work'">
+                <span>
+                  -
+                  {{
+                    workReports[Math.floor(Math.random() * workReports.length)]
+                      .value
+                  }}
+                </span>
+                <br />
+                <span>
+                  -
+                  {{
+                    workReports[Math.floor(Math.random() * workReports.length)]
+                      .value
+                  }}
+                </span>
+                <br />
+                <span>
+                  -
+                  {{
+                    workReports[Math.floor(Math.random() * workReports.length)]
+                      .value
+                  }}
+                </span>
+              </span>
+              <span v-else-if="day.value === 'school'">
+                <span>
+                  -
+                  {{
+                    schoolReports[
+                      Math.floor(Math.random() * schoolReports.length)
+                    ].value
+                  }}
+                </span>
+                <br />
+                <span>
+                  -
+                  {{
+                    schoolReports[
+                      Math.floor(Math.random() * schoolReports.length)
+                    ].value
+                  }}
+                </span>
+                <br />
+                <span>
+                  -
+                  {{
+                    schoolReports[
+                      Math.floor(Math.random() * schoolReports.length)
+                    ].value
+                  }}
+                </span>
+              </span>
               <span v-else-if="day.value === 'free'"> Frei </span>
             </td>
 
